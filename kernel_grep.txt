@@ -1,0 +1,376 @@
+arch/arm64/boot/dts/mediatek/k69v1_64.dts:/*//prize added by pengzhipeng, focaltech,fts support, 20200831-start*/
+arch/arm64/boot/dts/mediatek/k69v1_64.dts:	focaltech_spi@0 {
+arch/arm64/boot/dts/mediatek/k69v1_64.dts:		compatible = "focaltech,fts";
+arch/arm64/boot/dts/mediatek/k69v1_64.dts:/*//prize added by pengzhipeng, focaltech,fts support, 20200831-end*/
+arch/arm64/boot/dts/mediatek/k69v1_64.dts:		compatible = "focaltech,fingerprint-spidev";
+arch/arm64/configs/yogurt_defconfig:#prize added by pengzhipeng, focaltech,fts support, 20200831-start
+arch/arm64/configs/yogurt_defconfig:CONFIG_TOUCHSCREEN_MTK_FTS_DIRECTORY="focaltech_touch_spi"
+arch/arm64/configs/yogurt_defconfig:#prize added by pengzhipeng, focaltech,fts support, 20200831-start
+drivers/input/mouse/focaltech.c:#include "focaltech.h"
+drivers/input/mouse/focaltech.c:static const char * const focaltech_pnp_ids[] = {
+drivers/input/mouse/focaltech.c:int focaltech_detect(struct psmouse *psmouse, bool set_properties)
+drivers/input/mouse/focaltech.c:	if (!psmouse_matches_pnp_id(psmouse, focaltech_pnp_ids))
+drivers/input/mouse/focaltech.c:struct focaltech_finger_state {
+drivers/input/mouse/focaltech.c:struct focaltech_hw_state {
+drivers/input/mouse/focaltech.c:	struct focaltech_finger_state fingers[FOC_MAX_FINGERS];
+drivers/input/mouse/focaltech.c:struct focaltech_data {
+drivers/input/mouse/focaltech.c:	struct focaltech_hw_state state;
+drivers/input/mouse/focaltech.c:static void focaltech_report_state(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv = psmouse->private;
+drivers/input/mouse/focaltech.c:	struct focaltech_hw_state *state = &priv->state;
+drivers/input/mouse/focaltech.c:		struct focaltech_finger_state *finger = &state->fingers[i];
+drivers/input/mouse/focaltech.c:static void focaltech_process_touch_packet(struct psmouse *psmouse,
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv = psmouse->private;
+drivers/input/mouse/focaltech.c:	struct focaltech_hw_state *state = &priv->state;
+drivers/input/mouse/focaltech.c:static void focaltech_process_abs_packet(struct psmouse *psmouse,
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv = psmouse->private;
+drivers/input/mouse/focaltech.c:	struct focaltech_hw_state *state = &priv->state;
+drivers/input/mouse/focaltech.c:static void focaltech_process_rel_packet(struct psmouse *psmouse,
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv = psmouse->private;
+drivers/input/mouse/focaltech.c:	struct focaltech_hw_state *state = &priv->state;
+drivers/input/mouse/focaltech.c:static void focaltech_process_packet(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:		focaltech_process_touch_packet(psmouse, packet);
+drivers/input/mouse/focaltech.c:		focaltech_process_abs_packet(psmouse, packet);
+drivers/input/mouse/focaltech.c:		focaltech_process_rel_packet(psmouse, packet);
+drivers/input/mouse/focaltech.c:	focaltech_report_state(psmouse);
+drivers/input/mouse/focaltech.c:static psmouse_ret_t focaltech_process_byte(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:		focaltech_process_packet(psmouse);
+drivers/input/mouse/focaltech.c:static int focaltech_switch_protocol(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:static void focaltech_reset(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:static void focaltech_disconnect(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:	focaltech_reset(psmouse);
+drivers/input/mouse/focaltech.c:static int focaltech_reconnect(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:	focaltech_reset(psmouse);
+drivers/input/mouse/focaltech.c:	error = focaltech_switch_protocol(psmouse);
+drivers/input/mouse/focaltech.c:static void focaltech_set_input_params(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv = psmouse->private;
+drivers/input/mouse/focaltech.c:static int focaltech_read_register(struct ps2dev *ps2dev, int reg,
+drivers/input/mouse/focaltech.c:static int focaltech_read_size(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv = psmouse->private;
+drivers/input/mouse/focaltech.c:	if (focaltech_read_register(ps2dev, 2, param))
+drivers/input/mouse/focaltech.c:static void focaltech_set_resolution(struct psmouse *psmouse,
+drivers/input/mouse/focaltech.c:static void focaltech_set_rate(struct psmouse *psmouse, unsigned int rate)
+drivers/input/mouse/focaltech.c:static void focaltech_set_scale(struct psmouse *psmouse,
+drivers/input/mouse/focaltech.c:int focaltech_init(struct psmouse *psmouse)
+drivers/input/mouse/focaltech.c:	struct focaltech_data *priv;
+drivers/input/mouse/focaltech.c:	psmouse->private = priv = kzalloc(sizeof(struct focaltech_data),
+drivers/input/mouse/focaltech.c:	focaltech_reset(psmouse);
+drivers/input/mouse/focaltech.c:	error = focaltech_read_size(psmouse);
+drivers/input/mouse/focaltech.c:	error = focaltech_switch_protocol(psmouse);
+drivers/input/mouse/focaltech.c:	focaltech_set_input_params(psmouse);
+drivers/input/mouse/focaltech.c:	psmouse->protocol_handler = focaltech_process_byte;
+drivers/input/mouse/focaltech.c:	psmouse->disconnect = focaltech_disconnect;
+drivers/input/mouse/focaltech.c:	psmouse->reconnect = focaltech_reconnect;
+drivers/input/mouse/focaltech.c:	psmouse->cleanup = focaltech_reset;
+drivers/input/mouse/focaltech.c:	psmouse->set_resolution = focaltech_set_resolution;
+drivers/input/mouse/focaltech.c:	psmouse->set_rate = focaltech_set_rate;
+drivers/input/mouse/focaltech.c:	psmouse->set_scale = focaltech_set_scale;
+drivers/input/mouse/focaltech.c:	focaltech_reset(psmouse);
+drivers/input/mouse/psmouse-base.c:#include "focaltech.h"
+drivers/input/mouse/psmouse-base.c:		.alias		= "focaltech",
+drivers/input/mouse/psmouse-base.c:		.detect		= focaltech_detect,
+drivers/input/mouse/psmouse-base.c:		.init		= focaltech_init,
+drivers/input/mouse/psmouse-base.c:	 * Always check for focaltech, this is safe as it uses pnp-id
+drivers/input/mouse/psmouse-base.c:	if (psmouse_do_detect(focaltech_detect,
+drivers/input/mouse/psmouse-base.c:		    (!set_properties || focaltech_init(psmouse) == 0)) {
+drivers/input/mouse/focaltech.h:int focaltech_detect(struct psmouse *psmouse, bool set_properties);
+drivers/input/mouse/focaltech.h:int focaltech_init(struct psmouse *psmouse);
+drivers/input/mouse/focaltech.h:static inline int focaltech_init(struct psmouse *psmouse)
+drivers/input/mouse/Makefile:psmouse-objs := psmouse-base.o synaptics.o focaltech.o
+drivers/input/fingerprint/focaltech_tee/ff_ctl.h:#define FF_CTL_DEV_NAME "/dev/focaltech_fp"
+drivers/input/fingerprint/focaltech_tee/ff_ctl.c:#define FF_DRV_NAME "focaltech_fp"
+drivers/input/fingerprint/focaltech_tee/ff_ctl.c:	strcpy(current_fingerprint_info.vendor,"focaltech");
+drivers/input/fingerprint/focaltech_tee/ff_err.h: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/base/focaltech/ff_err.h
+drivers/input/fingerprint/focaltech_tee/ff_log.h: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/base/focaltech/ff_log.h
+drivers/input/fingerprint/focaltech_tee/ff_log.h: * The default LOG_TAG is 'focaltech', using these two lines to define newtag.
+drivers/input/fingerprint/focaltech_tee/ff_log.h:#define LOG_TAG "focaltech"
+drivers/input/fingerprint/focaltech_tee/Makefile:obj-y := focaltech_fp.o 
+drivers/input/fingerprint/focaltech_tee/Makefile:focaltech_fp-objs := ff_ctl.o 
+drivers/input/fingerprint/focaltech_tee/Makefile:focaltech_fp-objs += plat-mt6762.o
+drivers/input/fingerprint/Makefile:obj-$(CONFIG_FT9362_FINGERPRINT) += focaltech/
+drivers/input/fingerprint/Makefile:obj-$(CONFIG_FT9362_FINGERPRINT_TEE) += focaltech_tee/
+drivers/input/fingerprint/focaltech/chip-ft9348.c: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/chips/ft9348.c
+drivers/input/fingerprint/focaltech/chip-ft9348.c:#define LOG_TAG "focaltech:ft9348"
+drivers/input/fingerprint/focaltech/ff_chip.h: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/chips/protocol.h
+drivers/input/fingerprint/focaltech/spidev.c:	{ .compatible = "focaltech,fingerprint-spidev" },
+drivers/input/fingerprint/focaltech/ff_ctl.h:#define FF_CTL_DEV_NAME "/dev/focaltech_fp"
+drivers/input/fingerprint/focaltech/readme.txt:      will be called 'focaltech_fp'.
+drivers/input/fingerprint/focaltech/readme.txt:obj-$(CONFIG_FOCALTECH_FINGERPRINT) += focaltech/
+drivers/input/fingerprint/focaltech/ff_ctl.c:#define FF_DRV_NAME "focaltech_fp"
+drivers/input/fingerprint/focaltech/ff_ctl.c:	strcpy(current_fingerprint_info.vendor,"focaltech");
+drivers/input/fingerprint/focaltech/ff_err.h: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/base/focaltech/ff_err.h
+drivers/input/fingerprint/focaltech/ff_log.h: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/base/focaltech/ff_log.h
+drivers/input/fingerprint/focaltech/ff_log.h: * The default LOG_TAG is 'focaltech', using these two lines to define newtag.
+drivers/input/fingerprint/focaltech/ff_log.h:#define LOG_TAG "focaltech"
+drivers/input/fingerprint/focaltech/plat-msm8916.c:#define FF_COMPATIBLE_NODE "focaltech,fingerprint"
+drivers/input/fingerprint/focaltech/Makefile:#obj-$(CONFIG_FOCALTECH_FINGERPRINT) := focaltech_fp.o
+drivers/input/fingerprint/focaltech/Makefile:obj-y := focaltech_fp.o
+drivers/input/fingerprint/focaltech/Makefile:focaltech_fp-objs := ff_ctl.o ff_spi.o spidev.o plat-mt6762.o
+drivers/input/fingerprint/focaltech/ff_spi.h: * ${ANDROID_BUILD_TOP}/vendor/focaltech/src/base/focaltech/ff_spi.h
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_ctl.c: * File Name: focaltech_ctl.c
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_ctl.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_core.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_Gesture.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_ex_fun.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_flash.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/FT5X26/include/tpd_ft5x0x_common.h:/*focaltech register*/
+drivers/input/touchscreen/mediatek/FT5X26/Makefile:obj-y	+=  focaltech_ctl.o
+drivers/input/touchscreen/mediatek/FT5X26/Makefile:obj-y	+=  focaltech_ex_fun.o
+drivers/input/touchscreen/mediatek/FT5X26/Makefile:obj-y	+=  focaltech_flash.o
+drivers/input/touchscreen/mediatek/FT5X26/Makefile:obj-y	+=  focaltech_Gesture.o
+drivers/input/touchscreen/mediatek/FT5X26/Makefile:obj-y	+=  focaltech_core.o
+drivers/input/touchscreen/mediatek/FT5X26/focaltech_core.h: * File Name: focaltech_core.h
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.c:* File Name: focaltech_core.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.c:* Abstract: entrance for focaltech ts driver
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.c:*        If cant get the ic information, maybe not focaltech's touch IC, need
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.c:    {.compatible = "focaltech,fts", },
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_point_report_check.c:* File Name: focaltech_point_report_check.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_point_report_check.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_common.h:* File Name: focaltech_common.h
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_common.h:#include "focaltech_config.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_config.h:* File Name: focaltech_config.h
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_config.h: * choose your ic chip type of focaltech
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_config.h: * then file_name will be "focaltech_ts_fw_tianma"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_config.h: * You should rename fw to "focaltech_ts_fw_tianma", and push it into
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.h:* File Name: focaltech_flash.h
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.h:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_ex_mode.c:* File Name: focaltech_ex_mode.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_ex_mode.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_spi.c:* File Name: focaltech_spi.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_spi.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_ex_fun.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_gesture.c:* File Name: focaltech_gestrue.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_gesture.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.c:* File Name: focaltech_flash.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.c:#include "focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.c:/* Example: focaltech_ts_fw_tianma.bin */
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_flash.c:#define FTS_FW_NAME_PREX_WITH_REQUEST               "focaltech_ts_fw_"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:# Makefile for the focaltech touchscreen drivers.
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_core.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_ex_fun.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_ex_mode.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_gesture.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_esdcheck.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_point_report_check.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_proximity.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)   +=  focaltech_spi.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_flash.o
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.h:* File Name: focaltech_core.h
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_core.h:#include "focaltech_common.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_proximity.c:* File Name: focaltech_proximity.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_proximity.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_proximity.c:#include "focaltech_common.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_esdcheck.c:* File Name: focaltech_esdcheck.c
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/focaltech_esdcheck.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_spi/Kconfig:    default "focaltech_touch"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_core.c: * File Name: focaltech_core.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_core.c: * Abstract: entrance for focaltech ts driver
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_core.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_core.c: *        If cant get the ic information, maybe not focaltech's touch IC, need
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_point_report_check.c: * File Name: focaltech_point_report_check.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_point_report_check.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_common.h: * File Name: focaltech_common.h
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_common.h:#include "focaltech_config.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_config.h: * File Name: focaltech_config.h
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_config.h: * choose your ic chip type of focaltech
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_config.h: * then file_name will be "focaltech_ts_fw_tianma"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_config.h: * You should rename fw to "focaltech_ts_fw_tianma", and push it into
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.h: * File Name: focaltech_flash.h
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.h:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_i2c.c: * File Name: focaltech_i2c.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_i2c.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_ex_mode.c: * File Name: focaltech_ex_mode.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_ex_mode.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_ex_fun.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_gesture.c: * File Name: focaltech_gestrue.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_gesture.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.c: * File Name: focaltech_flash.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.c:#include "focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.c:/* Example: focaltech_ts_fw_tianma.bin */
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash.c:#define FTS_FW_NAME_PREX_WITH_REQUEST "focaltech_ts_fw_"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8736.c: * File Name: focaltech_upgrade_ft8736.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8736.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft7251.c: * File Name: focaltech_upgrade_ft7251.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft7251.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8006m.c: * File Name: focaltech_upgrade_ft8006m.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8006m.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8719.c: * File Name: focaltech_upgrade_ft8719.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8719.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8613s.c: * File Name: focaltech_upgrade_ft8613s.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8613s.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5472.c: * File Name: focaltech_upgrade_ft5472.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5472.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5822.c: * File Name: focaltech_upgrade_ft5822.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5822.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft6426.c: * File Name: focaltech_upgrade_ft6426.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft6426.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5452.c: * File Name: focaltech_upgrade_ft5452.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5452.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8716.c: * File Name: focaltech_upgrade_ft8716.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8716.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8006u.c: * File Name: focaltech_upgrade_ft8006u.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8006u.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft6216.c: * File Name: focaltech_upgrade_ft6216.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft6216.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft5422.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft5822.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft6426.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8006m.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8607.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8716.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8736.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8006u.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft5422u.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8719.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8739.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft5452.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft5472.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8006p.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft6216.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft7251.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD) += focaltech_upgrade_ft8613s.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5422u.c: * File Name: focaltech_upgrade_ft5422u.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5422u.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8607.c: * File Name: focaltech_upgrade_ft8607.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8607.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8006p.c: * File Name: focaltech_upgrade_ft8006p.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8006p.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5422.c: * File Name: focaltech_upgrade_ft5422.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft5422.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8739.c: * File Name: focaltech_upgrade_ft8739.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_flash/focaltech_upgrade_ft8739.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:# Makefile for the focaltech touchscreen drivers.
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:ccflags-y += -I$(srctree)/drivers/input/touchscreen/mediatek/focaltech_fhd_touch/
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_core.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_ex_fun.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_ex_mode.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_gesture.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_esdcheck.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)   +=  focaltech_point_report_check.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)   +=  focaltech_proximity.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:# obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)   +=  focaltech_test/
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)   +=  focaltech_i2c.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_flash.o
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)   +=  focaltech_flash/
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_core.h: * File Name: focaltech_core.h
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_core.h:#include "focaltech_common.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_proximity.c: * File Name: focaltech_proximity.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_proximity.c:#include "focaltech_common.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_proximity.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_esdcheck.c: * File Name: focaltech_esdcheck.c
+drivers/input/touchscreen/mediatek/focaltech_fhd_touch/focaltech_esdcheck.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_TS)	+=  focaltech_touch/
+drivers/input/touchscreen/mediatek/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_FHD)	+=  focaltech_fhd_touch/
+drivers/input/touchscreen/mediatek/Makefile:obj-$(CONFIG_TOUCHSCREEN_FTS)	+=  focaltech_touch_spi/
+drivers/input/touchscreen/mediatek/Makefile:obj-$(CONFIG_TOUCHSCREEN_MTK_FOCALTECH_TS_V3) +=  focaltech_touch_V3/
+drivers/input/touchscreen/mediatek/GSL1691/gsl_ts_driver.c:		printk("focaltech tpd_probe regulator_disable() failed!\n");
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_core.c:* File Name: focaltech_core.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_core.c:* Abstract: entrance for focaltech ts driver
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_core.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_core.c:    {.compatible = "focaltech,ft3327"},
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_point_report_check.c:* File Name: focaltech_point_report_check.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_point_report_check.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_common.h:* File Name: focaltech_common.h
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_common.h:#include "focaltech_config.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_config.h:* File Name: focaltech_config.h
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_config.h: * choose your ic chip type of focaltech
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash.h:* File Name: focaltech_flash.h
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash.h:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_i2c.c:* File Name: focaltech_i2c.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_i2c.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_ex_mode.c:* File Name: focaltech_ex_mode.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_ex_mode.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_ex_fun.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_gesture.c:* File Name: focaltech_gestrue.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_gesture.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash.c:* File Name: focaltech_flash.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash.c:#include "focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8736.c:* File Name: focaltech_upgrade_ft8736.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8736.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8736.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006.c:* File Name: focaltech_upgrade_ft8006.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8719.c:* File Name: focaltech_upgrade_ft8719.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8719.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8719.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft6336gu.c:* File Name: focaltech_upgrade_ft6336GU.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft6336gu.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft6336gu.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5x46.c:* File Name: focaltech_upgrade_ft5x46.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5x46.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5x46.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5822.c:* File Name: focaltech_upgrade_ft5822.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5822.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5822.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5452.c:* File Name: focaltech_upgrade_ft5452.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5452.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5452.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8716.c:* File Name: focaltech_upgrade_ft8716.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8716.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8716.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006u.c:* File Name: focaltech_upgrade_ft8006u.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006u.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006u.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#drivers/input/touchscreen/mediatek/focaltech_ts/focaltech_flash
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:obj-y += focaltech_upgrade_ft5x46.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft5822.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft6336gu.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8006.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8606.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8607.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8716.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8736.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8006u.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft5422u.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8719.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8739.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft5452.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/Makefile:#obj-y += focaltech_upgrade_ft8006p.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5422u.c:* File Name: focaltech_upgrade_ft5422u.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5422u.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft5422u.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8606.c:* File Name: focaltech_upgrade_ft8606.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8606.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8606.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8607.c:* File Name: focaltech_upgrade_ft8607.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8607.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8607.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006p.c:* File Name: focaltech_upgrade_ft8006p.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006p.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8006p.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8739.c:* File Name: focaltech_upgrade_ft8739.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8739.c:#include "../focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_flash/focaltech_upgrade_ft8739.c:#include "../focaltech_flash.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_ex_fun.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_flash.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_gesture.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_core.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_esdcheck.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_ex_mode.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_proximity.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_i2c.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y    +=  focaltech_point_report_check.o
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:#obj-y +=     focaltech_test/
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/Makefile:obj-y +=     focaltech_flash/
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_core.h:* File Name: focaltech_core.h
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_core.h:#include "focaltech_common.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_proximity.c:* File Name: focaltech_proximity.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_proximity.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_proximity.c:#include "focaltech_common.h"
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_esdcheck.c:* File Name: focaltech_esdcheck.c
+drivers/input/touchscreen/mediatek/focaltech_touch_V3/focaltech_esdcheck.c:#include "focaltech_core.h"
+drivers/input/touchscreen/mediatek/Kconfig:	  Say Y here if you have focaltech_touch touch panel.
+drivers/input/touchscreen/mediatek/Kconfig:source "drivers/input/touchscreen/mediatek/focaltech_touch_spi/Kconfig"
+drivers/input/touchscreen/edt-ft5x06.c:	/* Note focaltech vendor prefix for compatibility with ft6236.c */
+drivers/input/touchscreen/edt-ft5x06.c:	{ .compatible = "focaltech,ft6236", .data = &edt_ft6236_data },
+drivers/misc/mediatek/lcm/ft8006p_hdp_dsi_vdo_boe_drip_incell/ft8006p_hdp_dsi_vdo_boe_drip_incell.c:		.vendor	= "focaltech",
+drivers/misc/mediatek/lcm/ft8006p_hdp_dsi_vdo_boe_drip_incell/Makefile:#ccflags-y += -I$(srctree)/drivers/input/touchscreen/mediatek/focaltech_touch_V3
+drivers/misc/mediatek/lcm/ili7807d_fhdp_dsi_vdo_boe_drip_incell/ili7807d_fhdp_dsi_vdo_boe_drip_incell.c:		.vendor	= "focaltech",
+drivers/misc/mediatek/lcm/ft8756_fhdp_dsi_vdo_tcl/ft8756_fhdp_dsi_vdo_tcl.c:		.vendor	= "focaltech",
+Documentation/devicetree/bindings/vendor-prefixes.txt:focaltech	FocalTech Systems Co.,Ltd
+Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.txt:           or:  "focaltech,ft6236"
